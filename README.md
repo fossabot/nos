@@ -1,1 +1,3 @@
-# nos
+# NamiOS
+
+Learning about OS development.
