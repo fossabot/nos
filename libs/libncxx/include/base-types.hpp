@@ -1,5 +1,6 @@
 #pragma once
 
+#include <def.hpp>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -7,11 +8,8 @@ namespace nos {
 
 using nullptr_t = decltype(nullptr);
 
-using ::intmax_t;
-using ::intptr_t;
-
-using ::uintmax_t;
-using ::uintptr_t;
+using intptr_t = ::intptr_t;
+using uintptr_t = ::uintptr_t;
 
 using s8_t = ::int8_t;
 using s16_t = ::int16_t;
@@ -31,6 +29,10 @@ using size_t = ::size_t;
 enum class byte : u8_t
 {
     zero = 0x00
+};
+
+enum class alignment_t : size_t
+{
 };
 
 } // namespace nos

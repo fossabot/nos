@@ -2,8 +2,9 @@ src = files(
 )
 
 libncxx = static_library(
-    'ncxx', src,
+    'libncxx', src,
     install : false,
+    name_prefix: '',
     include_directories : ['source', 'include'],
     c_args : [
         '-ffreestanding',
@@ -19,12 +20,15 @@ libncxx_dep  = declare_dependency(
 
 if not meson.is_cross_build()
     tests = files(
-        'tests/type_traits/is_same_tests.cpp',
-        'tests/string_view_tests.cpp'
+        'tests/container/array-tests.cpp',
+        'tests/memory/allocator/null-allocator-tests.cpp',
+        'tests/memory/allocator/stack-allocator-tests.cpp',
+        'tests/type-traits/is-same-tests.cpp',
+        'tests/string/string-view-tests.cpp'
     )
 
     libncxx_tests = executable(
-        'ncxx_tests', [tests], 
+        'libncxx_tests', [tests], 
         install : false,
         dependencies : [catch2_dep, libncxx_dep],
         include_directories : [
