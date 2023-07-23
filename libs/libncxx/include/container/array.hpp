@@ -4,14 +4,14 @@
 #include <memory/block.hpp>
 #include <type-traits/conditional.hpp>
 
-namespace N {
+namespace NOS {
 
 template<class T>
 using ArraySizeTypeT = ConditionalT<sizeof(T) < 4 && sizeof(void*) >= 8, u64_t, u32_t>;
 
 namespace Details {
-    
-// we inherit from our allocator to ensure we're properly aligned even for size 0 allocator class 
+
+// we inherit from our allocator to ensure we're properly aligned even for size 0 allocator class
 template<typename T, typename TAllocator>
 class ArrayBase : private TAllocator
 {
@@ -45,9 +45,9 @@ constexpr auto getArrayOffsetOfFirst()
 } // namespace Details
 
 template<typename T, typename TAllocator>
-class Array : public details::ArrayBase<T, TAllocator>
+class Array : public Details::ArrayBase<T, TAllocator>
 {
-    using Base = details::ArrayBase<T, TAllocator>;
+    using Base = Details::ArrayBase<T, TAllocator>;
 
 public:
     using typename Base::AllocatorType;
@@ -100,7 +100,7 @@ constexpr void* Array<T, TAllocator>::getAddressOfFirst() const
     /// Find the address of the first element. For this pointer math to be valid
     /// with small-size of 0 for T with lots of alignment, it's important that
     /// ArrayStorage is properly-aligned even for small-size of 0.
-    return const_cast<void*>(reinterpret_cast<const void*>(reinterpret_cast<const byte*>(this) + details::getArrayOffsetOfFirst<T, TAllocator>()));
+    return const_cast<void*>(reinterpret_cast<const void*>(reinterpret_cast<const byte*>(this) + Details::getArrayOffsetOfFirst<T, TAllocator>()));
 }
 
 template<typename T, typename TAllocator>
@@ -113,7 +113,7 @@ constexpr void Array<T, TAllocator>::growIfNecessary(size_t requiredSize)
 
     const auto newCapacity = Base::_capacity * 2;
 
-    memory::Block block = AllocatorType::allocate(newCapacity);
+    Memory::Block block = AllocatorType::allocate(newCapacity);
 
     T* oldPtr = reinterpret_cast<T*>(Base::_pointer);
     T* newPtr = reinterpret_cast<T*>(block.pointer);
@@ -124,7 +124,7 @@ constexpr void Array<T, TAllocator>::growIfNecessary(size_t requiredSize)
 
     if (isAllocated())
     {
-        AllocatorType::deallocate(memory::Block{Base::_pointer, Base::_capacity});
+        AllocatorType::deallocate(Memory::Block{Base::_pointer, Base::_capacity});
     }
 
     Base::_pointer = block.pointer;
@@ -138,4 +138,4 @@ constexpr InplaceArray<T, TSize, TAllocator>::InplaceArray()
     Base::_capacity = TSize;
 }
 
-} // namespace N
+} // namespace NOS
