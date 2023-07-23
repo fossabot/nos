@@ -3,10 +3,13 @@ name: Native Unit Tests
 
 on:
   push:
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build-and-tests:
-    name: Build and Tests
+  native-unit-tests:
+    name: Native Unit Tests
     runs-on: ubuntu-22.04
     container: i73v/nos-build-machine:latest
 
