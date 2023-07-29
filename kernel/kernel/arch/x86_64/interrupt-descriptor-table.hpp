@@ -1,8 +1,8 @@
 #pragma once
 
 #include <ncxx/basic-types.hpp>
-#include <ncxx/preprocessor/packed.hpp>
 #include <ncxx/container/static-array.hpp>
+#include <ncxx/preprocessor/packed.hpp>
 #include <ncxx/utility/enum-string.hpp>
 
 namespace NOS::X86_64 {

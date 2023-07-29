@@ -42,7 +42,8 @@ constexpr auto getArrayOffsetOfFirst()
     return offsetof(AlignmentAndSize, first);
 }
 
-struct DefaultAllocator{};
+struct DefaultAllocator
+{};
 
 } // namespace Details
 

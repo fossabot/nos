@@ -56,4 +56,4 @@ private:
 
 #pragma clang diagnostic pop
 
-} // namespace NOS
+} // namespace NOS::X86_64

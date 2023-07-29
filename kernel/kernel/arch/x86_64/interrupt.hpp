@@ -32,7 +32,7 @@ inline void halt()
 
 [[noreturn]] inline void hcf()
 {
-    while(true)
+    while (true)
         asm volatile("cli; hlt");
 }
 

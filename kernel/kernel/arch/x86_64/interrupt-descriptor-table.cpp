@@ -78,9 +78,8 @@ void InterruptDescriptorTable::dispatch(const CPU::Registers& registers)
 
 InterruptDescriptorTable::Register InterruptDescriptorTable::makeRegister() const
 {
-    return {
-        .limit = static_cast<u16_t>(sizeof(Entry) * _entries.size() - 1),
-        .base = reinterpret_cast<uintptr_t>(_entries.data())};
+    return {.limit = static_cast<u16_t>(sizeof(Entry) * _entries.size() - 1),
+            .base = reinterpret_cast<uintptr_t>(_entries.data())};
 }
 
 void InterruptDescriptorTable::handleException(const CPU::Registers& registers)
