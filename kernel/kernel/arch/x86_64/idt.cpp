@@ -1,14 +1,9 @@
-#include <kernel/arch/x86_64/interrupt-descriptor-table.hpp>
+#include <kernel/arch/x86_64/idt.hpp>
 
 #include <kernel/arch/x86_64/cpu.hpp>
-#include <kernel/arch/x86_64/global-descriptor-table.hpp>
+#include <kernel/arch/x86_64/gdt.hpp>
 #include <kernel/utility/log.hpp>
 #include <kernel/utility/panic.hpp>
-#include <ncxx/container/static-array.hpp>
-#include <ncxx/debug/assert.hpp>
-#include <ncxx/preprocessor/packed.hpp>
-#include <ncxx/string/format.hpp>
-#include <ncxx/string/string-view.hpp>
 #include <ncxx/utility/to-underlying-type.hpp>
 
 extern "C" void* NOS_interruptTable[];
@@ -18,7 +13,7 @@ namespace NOS::X86_64 {
 
 namespace {
 
-InterruptDescriptorTable* idt{nullptr};
+IDT* idt{nullptr};
 
 void logRegisters(const X86_64::CPU::Registers& registers)
 {
@@ -37,11 +32,11 @@ void logRegisters(const X86_64::CPU::Registers& registers)
 
 } // namespace
 
-void InterruptDescriptorTable::Entry::set(void* isr_, uint8_t typeAttr_, uint8_t ist_)
+void IDT::Entry::set(void* isr_, uint8_t typeAttr_, uint8_t ist_)
 {
     u64_t isr = reinterpret_cast<u64_t>(isr_);
     offset1 = static_cast<u16_t>(isr);
-    selector = GlobalDescriptorTable::Selector::Code;
+    selector = GDT::Selector::Code;
     ist = ist_;
     typeAttr = typeAttr_;
     offset2 = static_cast<u16_t>(isr >> 16);
@@ -49,14 +44,14 @@ void InterruptDescriptorTable::Entry::set(void* isr_, uint8_t typeAttr_, uint8_t
     zero = 0;
 }
 
-InterruptDescriptorTable::InterruptDescriptorTable()
+IDT::IDT()
 {
     NOS_ASSERT(idt == nullptr);
 
     idt = this;
 }
 
-void InterruptDescriptorTable::load()
+void IDT::load()
 {
     Log::info("idt: loading");
 
@@ -71,7 +66,7 @@ void InterruptDescriptorTable::load()
     asm volatile("lidt %0" ::"memory"(r));
     asm volatile("sti");
 }
-void InterruptDescriptorTable::dispatch(const CPU::Registers& registers)
+void IDT::dispatch(const CPU::Registers& registers)
 {
     Log::info("idt: dispatch");
 
@@ -94,13 +89,13 @@ void InterruptDescriptorTable::dispatch(const CPU::Registers& registers)
     }
 }
 
-InterruptDescriptorTable::Register InterruptDescriptorTable::makeRegister() const
+IDT::Register IDT::makeRegister() const
 {
     return {.limit = static_cast<u16_t>(sizeof(Entry) * _entries.size() - 1),
             .base = reinterpret_cast<uintptr_t>(_entries.data())};
 }
 
-void InterruptDescriptorTable::handleException(const CPU::Registers& registers)
+void IDT::handleException(const CPU::Registers& registers)
 {
     Log::error("idt: Exception {} on CPU {}", ExceptionString[registers.interrupt], 0);
     logRegisters(registers);

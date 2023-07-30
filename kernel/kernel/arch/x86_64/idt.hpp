@@ -11,7 +11,7 @@ namespace CPU {
 struct Registers;
 } // namespace CPU
 
-class NOS_PACKED InterruptDescriptorTable
+class NOS_PACKED IDT
 {
 public:
     enum class Exception
@@ -75,7 +75,7 @@ public:
     };
 
 public:
-    InterruptDescriptorTable();
+    IDT();
 
     void load();
     void dispatch(const CPU::Registers& registers);
