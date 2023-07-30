@@ -33,6 +33,7 @@ if not meson.is_cross_build()
         'ncxx/memory/allocator/null-allocator.test.cpp',
         'ncxx/memory/allocator/stack-allocator.test.cpp',
         'ncxx/memory/tagged-ptr.test.cpp',
+        'ncxx/memory/unique-ptr.test.cpp',
         'ncxx/range/all.test.cpp',
         'ncxx/range/all-of.test.cpp',
         'ncxx/range/any.test.cpp',
