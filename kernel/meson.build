@@ -18,6 +18,7 @@ if arch == 'x86_64'
         'kernel/arch/x86_64/global-descriptor-table.cpp',
         'kernel/arch/x86_64/interrupt-descriptor-table.cpp',
         'kernel/arch/x86_64/interrupt-descriptor-table.S',
+        'kernel/arch/x86_64/programmable-interrupt-controller.cpp',
         'kernel/arch/x86_64/task-state-segment.cpp'
     )
 endif

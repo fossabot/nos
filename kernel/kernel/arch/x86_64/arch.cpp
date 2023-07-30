@@ -11,6 +11,8 @@ void Arch::initialize()
 
     _gdt.load(_tss);
     _idt.load();
+
+    _pic.initialize();
 }
 
 } // namespace NOS::X86_64

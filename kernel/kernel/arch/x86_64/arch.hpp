@@ -2,6 +2,7 @@
 
 #include <kernel/arch/x86_64/global-descriptor-table.hpp>
 #include <kernel/arch/x86_64/interrupt-descriptor-table.hpp>
+#include <kernel/arch/x86_64/programmable-interrupt-controller.hpp>
 #include <kernel/arch/x86_64/task-state-segment.hpp>
 
 namespace NOS::X86_64 {
@@ -15,6 +16,7 @@ private:
     GlobalDescriptorTable _gdt;
     TaskStateSegment _tss;
     InterruptDescriptorTable _idt;
+    ProgrammableInterruptController _pic;
 };
 
 } // namespace NOS::X86_64
