@@ -1,4 +1,6 @@
 # N.OS
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FI73v%2Fnos.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FI73v%2Fnos?ref=badge_shield)
+
 
 Learning about OS development.
 
@@ -23,3 +25,7 @@ sudo ./llvm.sh 16 all
  - [Meson Build](https://mesonbuild.com/)
  - [Google](https://www.google.ca/)
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FI73v%2Fnos.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FI73v%2Fnos?ref=badge_large)
