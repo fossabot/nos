@@ -20,6 +20,21 @@ namespace {
 
 InterruptDescriptorTable* idt{nullptr};
 
+void logRegisters(const X86_64::CPU::Registers& registers)
+{
+    Log::error("idt: registers");
+    Log::ScopeIndent scopeIndent;
+
+    // clang-format off
+    Log::error("r8=0x{:X} r9=0x{:X} r10=0x{:X} r11=0x{:X} r12=0x{:X} r13=0x{:X} r14=0x{:X} r15=0x{:X}",
+               registers.r8, registers.r9, registers.r10, registers.r11, registers.r12, registers.r13, registers.r14, registers.r15);
+    Log::error("rax=0x{:X} rbx=0x{:X} rcx=0x{:X} rdx=0x{:X} rsi=0x{:X} rdi=0x{:X} rbp=0x{:X}",
+               registers.rax, registers.rbx, registers.rcx, registers.rdx, registers.rsi, registers.rdi, registers.rbp);
+    Log::error("interrupt=0x{:X} error code=0x{:X}",
+               registers.interrupt, registers.errorCode);
+    // clang-format on
+}
+
 } // namespace
 
 void InterruptDescriptorTable::Entry::set(void* isr_, uint8_t typeAttr_, uint8_t ist_)
@@ -69,10 +84,13 @@ void InterruptDescriptorTable::dispatch(const CPU::Registers& registers)
     else if (registers.interrupt >= exceptionCount && registers.interrupt < _entries.size())
     {
         Log::info("idt: Unhandled interrupt {}", registers.interrupt);
+        logRegisters(registers);
     }
     else
     {
-        panic(format("idt: Unknown interrupt {}", ExceptionString[registers.interrupt], 0));
+        Log::error("idt: Unknown interrupt {} on CPU {}", ExceptionString[registers.interrupt], 0);
+        logRegisters(registers);
+        panic();
     }
 }
 
@@ -84,7 +102,9 @@ InterruptDescriptorTable::Register InterruptDescriptorTable::makeRegister() cons
 
 void InterruptDescriptorTable::handleException(const CPU::Registers& registers)
 {
-    panic(format("idt: Exception {} on CPU {}", ExceptionString[registers.interrupt], 0));
+    Log::error("idt: Exception {} on CPU {}", ExceptionString[registers.interrupt], 0);
+    logRegisters(registers);
+    panic();
 }
 
 } // namespace NOS::X86_64
